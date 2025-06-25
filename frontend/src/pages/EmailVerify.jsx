@@ -4,9 +4,10 @@ import { assets } from '../assets/assets';
 import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import axiosInstance from '../utils/axiosInstance';
 const EmailVerify = () => {
   axios.defaults.withCredentials = true
-  const {backendUrl, isLoggedin, userData, getuserData} = useContext(AppContext)
+  const { isLoggedin, userData, getuserData} = useContext(AppContext)
   const navigate = useNavigate();
   const inputRefs = React.useRef([])
   const handleInput = (e, index) => {
@@ -35,7 +36,7 @@ const EmailVerify = () => {
       e.preventDefault();
       const otpArray = inputRefs.current.map(e => e.value)
       const otp = otpArray.join('')
-      const {data} = await axios.post(backendUrl + '/api/auth/verify-account', {otp})
+      const { data } = await axiosInstance.post('/api/auth/verify-account', { otp });
       if(data.success) {
         toast.success(data.message)
         getuserData()

@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import { assets } from '../assets/assets';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance'; // ✅ custom axios instance
 import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { backendUrl, setIsLoggedin, getuserData } = useContext(AppContext);
-
+  const { setIsLoggedin, getuserData } = useContext(AppContext);
   const [state, setState] = useState('Sign Up');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,16 +17,14 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const url = `${backendUrl}/api/auth/${state === 'Sign Up' ? 'register' : 'login'}`;
+      const endpoint = state === 'Sign Up' ? '/api/auth/register' : '/api/auth/login';
       const payload = state === 'Sign Up' ? { name, email, password } : { email, password };
 
-      const { data } = await axios.post(url, payload, {
-        withCredentials: true
-      });
+      const { data } = await axiosInstance.post(endpoint, payload);
 
       if (data.success) {
         setIsLoggedin(true);
-        await getuserData(); // this must use withCredentials internally too
+        await getuserData(); // should also use axiosInstance
         toast.success(data.message);
         navigate('/');
       } else {
@@ -60,7 +57,7 @@ const Login = () => {
               <input
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                className='text-white bg-transparent outline-none '
+                className='text-white bg-transparent outline-none'
                 type='text'
                 placeholder='Full Name'
                 required
@@ -72,7 +69,7 @@ const Login = () => {
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              className='text-white bg-transparent outline-none '
+              className='text-white bg-transparent outline-none'
               type='email'
               placeholder='Email id'
               required
@@ -83,7 +80,7 @@ const Login = () => {
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className='text-white bg-transparent outline-none '
+              className='text-white bg-transparent outline-none'
               type='password'
               placeholder='Password'
               required
