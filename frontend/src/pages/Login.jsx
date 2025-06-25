@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import axiosInstance from '../utils/axiosInstance'; // ✅ custom axios instance
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Login = () => {
     try {
       const endpoint = state === 'Sign Up' ? '/api/auth/register' : '/api/auth/login';
       const payload = state === 'Sign Up' ? { name, email, password } : { email, password };
-
+      axios.defaults.withCredentials = true
       const { data } = await axiosInstance.post(endpoint, payload);
 
       if (data.success) {

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axiosInstance"; // ✅ use custom instance
+import axios from "axios";
 
 export const AppContext = createContext();
 
@@ -11,6 +12,7 @@ export const AppContextProvider = (props) => {
 
   const getAuthState = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const { data } = await axiosInstance.get("/api/auth/is-auth");
       if (data.success) {
         setIsLoggedin(true);
@@ -26,6 +28,7 @@ export const AppContextProvider = (props) => {
 
   const getuserData = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const { data } = await axiosInstance.get("/api/user/data");
       if (data.success) {
         setUserData(data.userData);

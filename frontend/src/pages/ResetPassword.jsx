@@ -4,6 +4,7 @@ import { assets } from '../assets/assets';
 import { AppContext } from '../context/AppContext';
 import { toast } from 'react-toastify';
 import axiosInstance from '../utils/axiosInstance';
+import axios from 'axios';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const ResetPassword = () => {
   const onSubmitEmail = async (e) => {
     e.preventDefault();
     try {
+      axios.defaults.withCredentials = true;
       const { data } = await axiosInstance.post('/api/auth/send-reset-otp', { email });
       if (data.success) {
         toast.success(data.message);
@@ -63,6 +65,7 @@ const ResetPassword = () => {
     e.preventDefault();
     const otp = inputRefs.current.map((ref) => ref.value).join('');
     try {
+      axios.defaults.withCredentials = true;
       const { data } = await axiosInstance.post('/api/auth/reset-password', {
         email,
         otp,
