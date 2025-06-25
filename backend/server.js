@@ -10,11 +10,10 @@ const app = express();
 const port = process.env.port || 4000;
 connectDB();
 
-const allowedOrigins = ['https://mern-auth-by-kailash.vercel.app']
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: allowedOrigins, credentials: true}))
+app.use(cors({credentials: true}))
 
 //API Endpoints
 app.get('/', (req, res) => {
