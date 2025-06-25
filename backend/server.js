@@ -13,7 +13,8 @@ connectDB();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({credentials: true}))
+app.use(cors({origin: 'https://mern-auth-by-kailash.vercel.app/',
+    credentials: true}))
 
 //API Endpoints
 app.get('/', (req, res) => {
